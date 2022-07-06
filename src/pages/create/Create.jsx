@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect } from "react";
-import { useFetch } from "../../hooks/useFetch";
+import { useState, useRef } from "react";
+//import { useFetch } from "../../hooks/useFetch";
 import { useHistory } from "react-router-dom";
+
+import { projectFirestore } from "../../firebase/config";
 
 //styles
 import "./Create.css";
@@ -13,22 +15,29 @@ const Create = () => {
   const [ingredients, setIngredients] = useState([]); //array of all entered ingredients
   const ingredientInput = useRef(null);
 
-  const { postData, data, error } = useFetch(
-    "http://localhost:3000/recipes",
-    "POST"
-  );
+  // const { postData, data, error } = useFetch(
+  //   "http://localhost:3000/recipes",
+  //   "POST"
+  // ); analog zu Home und Recipe: hook not required
   const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(title, method, cookingTime, ingredients);
-    postData({
+    //postData({//postData: to be replaced by doc
+    const doc = {
       //data to be posted; NB: JSON server will automatically create and add an unique id
       title,
       ingredients,
       method,
       cookingTime: cookingTime + " minutes", //cause in db cooking time is a string with no and "minutes"
-    });
+    };
+    try {
+      await projectFirestore.collection("recipes").add(doc);
+      history.push("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleAdd = (e) => {
@@ -44,11 +53,11 @@ const Create = () => {
   };
 
   // redirect the user when we get data response
-  useEffect(() => {
-    if (data) {
-      history.push("/");
-    }
-  }, [data, history]);
+  // useEffect(() => {
+  //   if (data) {
+  //     history.push("/");
+  //   }
+  // }, [data, history]);
 
   return (
     <div className="create">

@@ -1,6 +1,7 @@
 import { createContext, useReducer } from "react";
 
-export const ThemeContext = createContext();
+export const ThemeContext = createContext(); //createContext() function
+//coming from react, to be used in our custom component "ThemeContext"
 
 const themeReducer = (state, action) => {
   switch (action.type) {
@@ -14,7 +15,10 @@ const themeReducer = (state, action) => {
 };
 
 export function ThemeProvider({ children }) {
-  ///children: in our case: App component, see index.js
+  // ThemeProvider: custom function, replaces ThemeContext.Provider
+  //children: in our case: App component, see index.js
+  //instead of ThemeContext.Provider Wrapper in index.js, we create a custom
+  //function here and use the wrapper in the return statement below
 
   //custom logic
   const [state, dispatch] = useReducer(themeReducer, {
@@ -38,3 +42,5 @@ export function ThemeProvider({ children }) {
     </ThemeContext.Provider>
   );
 }
+
+//ThemeContext.Provider values: these are the values that are accessible to all children
