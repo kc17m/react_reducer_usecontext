@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 //import { useFetch } from "../../hooks/useFetch";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { projectFirestore } from "../../firebase/config";
 
@@ -19,7 +19,7 @@ const Create = () => {
   //   "http://localhost:3000/recipes",
   //   "POST"
   // ); analog zu Home und Recipe: hook not required
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ const Create = () => {
     };
     try {
       await projectFirestore.collection("recipes").add(doc);
-      history.push("/");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
