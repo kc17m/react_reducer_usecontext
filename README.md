@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Task created in the course of Firebase / React tutorial
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## custom hooks
 
-## Available Scripts
+useFetch (not this time for Firebase: GET, POST, replaced by useEffect())
+POST replaced by doc in Firebase, unique id will automatically be created
+useTheme: makes use of useContext for dark/bright scheme
 
-In the project directory, you can run:
+## searchbar
 
-### `npm start`
+looks for any term included in recipe
+search by query string in url:   const url = "http://localhost:3000/recipes?q=" + query;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## theme selector
+switch from dark to bright scheme for certain css styles
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## onSnapshot
+onSnapshot for realTime Collection of data, e.g. after deleting
+instead of catch block: err function added to onSnapshot
+with unsubscribe function to stop listening when we switch to other page
 
-### `npm test`
+##
+all recipes: Home.jsx
+single recipe: Recipe.jsx with update: 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const handleClick = () => {
+    projectFirestore.collection("recipes").doc(id).update({
+      title: "something different",
+    });
+  };
+create recipe: Create.jsx
 
-### `npm run build`
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(title, method, cookingTime, ingredients);
+    //postData({//postData: to be replaced by doc
+    const doc = {
+      //data to be posted; NB: JSON server will automatically create and add an unique id
+      title,
+      ingredients,
+      method,
+      cookingTime: cookingTime + " minutes", //cause in db cooking time is a string with no and "minutes"
+    };
+    try {
+      await projectFirestore.collection("recipes").add(doc);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  
+search recipe: Search.jsx
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
